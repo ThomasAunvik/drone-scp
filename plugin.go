@@ -152,7 +152,7 @@ func (p Plugin) log(host string, message ...interface{}) {
 
 func (p *Plugin) removeDestFile(ssh *easyssh.MakeConfig) error {
 	p.log(ssh.Server, "remove file", p.DestFile)
-	_, errStr, _, err := ssh.Run(fmt.Sprintf("rm -rf %s", p.DestFile), p.Config.CommandTimeout)
+	_, errStr, _, err := ssh.Run(fmt.Sprintf("del %s", p.DestFile), p.Config.CommandTimeout)
 
 	if err != nil {
 		return err
