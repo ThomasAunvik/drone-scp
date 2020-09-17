@@ -337,7 +337,7 @@ func (p *Plugin) Exec() error {
 
 				// mkdir path
 				p.log(host, "create folder", target)
-				_, errStr, _, err := ssh.Run(fmt.Sprintf("mkdir -p %s", target), p.Config.CommandTimeout)
+				_, errStr, _, err := ssh.Run(fmt.Sprintf("mkdir %s", target), p.Config.CommandTimeout)
 				if err != nil {
 					errChannel <- err
 					return
