@@ -327,7 +327,7 @@ func (p *Plugin) Exec() error {
 				if p.Config.Remove {
 					p.log(host, "Remove target folder:", target)
 
-					_, _, _, err := ssh.Run(fmt.Sprintf("rm -rf %s", target), p.Config.CommandTimeout)
+					_, _, _, err := ssh.Run(fmt.Sprintf("rm %s", target), p.Config.CommandTimeout)
 
 					if err != nil {
 						errChannel <- err
@@ -338,14 +338,17 @@ func (p *Plugin) Exec() error {
 				// mkdir path
 				p.log(host, "create folder", target)
 				_, errStr, _, err := ssh.Run(fmt.Sprintf("mkdir %s", target), p.Config.CommandTimeout)
-				if err != nil {
-					errChannel <- err
-					return
-				}
+				
+				if !strings.Contains(errStr, "already exists.") {
+					if err != nil {
+						errChannel <- err
+						return
+					}
 
-				if len(errStr) != 0 {
-					errChannel <- fmt.Errorf(errStr)
-					return
+					if len(errStr) != 0 {
+						errChannel <- fmt.Errorf(errStr)
+						return
+					}
 				}
 
 				// untar file
